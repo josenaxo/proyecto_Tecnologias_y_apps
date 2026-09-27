@@ -5,3 +5,65 @@
 @import "@ionic/angular/css/display.css";
 @import "@ionic/angular/css/padding.css";
 @import "@ionic/angular/css/flex-utils.css";
+
+:root {
+  --fondo: #060b16;
+  --tarjeta: #0d1526;
+  --texto: #f0f6ff;
+  --suave: #6b7a99;
+  --verde: #00d4aa;
+  --rosa: #ff5a7e;
+  --borde: rgba(255, 255, 255, .06);
+  --ion-background-color: var(--fondo);
+  --ion-text-color: var(--texto);
+}
+
+* { box-sizing: border-box; }
+body { color: var(--texto); font-family: Inter, system-ui, sans-serif; }
+ion-content { --background: var(--fondo); flex: 1; }
+button { border: 0; color: inherit; font: inherit; cursor: pointer; }
+h1, h2, p { margin: 0; }
+h1, h2 { font-family: Outfit, sans-serif; }
+h1 { font-size: 22px; font-weight: 700; }
+h2 { font-size: 16px; font-weight: 600; }
+small { color: var(--suave); font-size: 11px; }
+.pagina { max-width: 480px; margin: auto; padding: calc(env(safe-area-inset-top) + 16px) 20px 32px; }
+.fila { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.cabecera { display: flex; align-items: center; gap: 12px; min-height: 48px; margin-bottom: 20px; }
+.cabecera h1 { flex: 1; }
+.sobrelinea { color: var(--suave); font-size: 11px; font-weight: 600; letter-spacing: .06em; }
+.titulo-seccion { margin: 23px 0 13px; }
+.enlace { padding: 4px 0; background: none; color: var(--verde); font-size: 13px; font-weight: 500; }
+.verde, .positivo { color: var(--verde) !important; }
+.rosado { color: var(--rosa); }
+.derecha { text-align: right; }
+.lista { display: flex; flex-direction: column; gap: 9px; }
+.detalle { display: flex; flex: 1; min-width: 0; flex-direction: column; gap: 4px; }
+.detalle strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; font-weight: 600; }
+.detalle small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.monto { flex: none; color: var(--rosa); font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+.monto.neutro { color: var(--texto); }
+.emoji { display: grid; place-items: center; flex: none; width: 42px; height: 42px; border-radius: 12px; background: rgba(255,90,126,.1); font-size: 21px; }
+.emoji-ingreso { background: rgba(0,212,170,.1); }
+.resumen { display: flex; flex-direction: column; gap: 8px; min-width: 0; padding: 13px; border: 1px solid var(--borde); border-radius: 16px; background: rgba(255,255,255,.03); }
+.resumen strong { font-family: 'JetBrains Mono', monospace; font-size: 16px; }
+.resumen.ingreso { background: rgba(0,212,170,.08); border-color: rgba(0,212,170,.14); }
+.resumen.gasto { background: rgba(255,90,126,.08); border-color: rgba(255,90,126,.14); }
+.resumen.ingreso small:first-child { color: var(--verde); }
+.resumen.gasto small:first-child { color: var(--rosa); }
+.dos-columnas { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; margin-bottom: 18px; }
+.tarjeta { padding: 17px; border: 1px solid var(--borde); border-radius: 22px; background: rgba(255,255,255,.03); }
+.tarjeta h2 { margin-bottom: 16px; }
+.barra { height: 7px; overflow: hidden; border-radius: 20px; background: rgba(255,255,255,.07); }
+.barra span { display: block; height: 100%; border-radius: inherit; background: var(--acento, var(--verde)); }
+.cifras { margin-top: 9px; font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+.cifras small { font-family: Inter, sans-serif; }
+.boton-principal { display: grid; place-items: center; width: 100%; min-height: 54px; border-radius: 15px; background: linear-gradient(135deg, #00d4aa, #00a882); box-shadow: 0 4px 24px rgba(0,212,170,.25); color: white; font-family: Outfit, sans-serif; font-size: 15px; font-weight: 700; text-decoration: none; }
+.boton-principal.rosa { background: linear-gradient(135deg, #ff5a7e, #d93d65); box-shadow: 0 4px 24px rgba(255,90,126,.25); }
+.boton-contorno { display: grid; place-items: center; width: 100%; min-height: 46px; margin-top: 15px; border: 1px solid rgba(0,212,170,.22); border-radius: 15px; background: rgba(0,212,170,.07); color: var(--verde); font-size: 13px; font-weight: 600; }
+.vacio { padding: 40px 0; color: var(--suave); text-align: center; }
+
+@media (max-width: 360px) {
+  .pagina { padding-right: 14px; padding-left: 14px; }
+  .monto { font-size: 10px; }
+}

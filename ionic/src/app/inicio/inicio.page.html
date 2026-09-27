@@ -1,0 +1,64 @@
+<ion-content>
+  <main class="pagina">
+    <header class="cabecera inicio-cabecera">
+      <div class="saludo"><div class="avatar">VT</div><div><small>Buenos días,</small><strong>Valentina</strong></div></div>
+      <button class="icono-boton" aria-label="Notificaciones" (click)="aviso = 'No hay notificaciones nuevas.'">♧<i></i></button>
+    </header>
+    <section class="balance-card">
+      <div class="fila"><span class="sobrelinea">BALANCE TOTAL</span><button class="pastilla" (click)="mostrarSaldo = !mostrarSaldo">{{ mostrarSaldo ? '◉ Ocultar' : '◉ Mostrar' }}</button></div>
+      <div class="balance-valor">{{ mostrarSaldo ? datos.corto(datos.balance) : '•••••' }} @if (mostrarSaldo) { <small>CLP</small> }</div>
+      <div class="variacion"><span>↑ {{ mostrarSaldo ? '+$1.91M este mes' : '••••••' }}</span><small>vs. julio 2026</small></div>
+      <svg class="sparkline" viewBox="0 0 342 52" preserveAspectRatio="none" aria-label="Evolución del balance">
+        <path d="M0 26 C28 26 54 38 68 38 C90 38 114 14 137 14 C160 14 182 44 205 44 C228 44 250 4 274 4 C298 4 320 22 342 22" fill="none" stroke="#00d4aa" stroke-width="2" />
+      </svg>
+      <div class="meses"><span>Mar</span><span>Abr</span><span>May</span><span>Jun</span><span>Jul</span><span>Ago</span></div>
+      <div class="balance-resumen">
+        <div class="resumen ingreso"><small>↑ Ingresos</small><strong>{{ mostrarSaldo ? datos.corto(datos.ingresos) : '••••' }}</strong></div>
+        <div class="resumen gasto"><small>↓ Gastos</small><strong>{{ mostrarSaldo ? datos.corto(datos.gastos) : '••••' }}</strong></div>
+      </div>
+    </section>
+    <nav class="accesos" aria-label="Accesos rápidos">
+      <button (click)="aviso = 'Transferencias disponibles más adelante.'"><span>📤</span>Transferir</button>
+      <button (click)="mostrarAnalisis = !mostrarAnalisis"><span>📊</span>Análisis</button>
+      <a routerLink="/metas"><span>🎯</span>Metas</a>
+      <a routerLink="/cuentas" [queryParams]="{ presupuesto: 1 }"><span>📋</span>Presupuesto</a>
+    </nav>
+
+    @if (mostrarAnalisis) {
+      <section class="tarjeta analisis titulo-seccion">
+        <div class="fila"><h2>Ingresos vs Gastos</h2><small><span class="verde">●</span> Ingreso &nbsp;<span class="rosado">●</span> Gasto</small></div>
+        <div class="filtros periodo"><button [class.activo]="periodo === '3m'" (click)="periodo = '3m'">3 meses</button><button [class.activo]="periodo === '6m'" (click)="periodo = '6m'">6 meses</button></div>
+        <div class="grafico-barras">
+          @for (m of mesesVisibles; track m) {
+            <div><div class="par-barras"><span [style.height.%]="m.ingreso / 4 * 100"></span><span [style.height.%]="m.gasto / 4 * 100"></span></div><small>{{ m.nombre }}</small></div>
+          }
+        </div>
+        <div class="dos-columnas">
+          <div class="resumen ingreso"><small>Ahorro neto</small><strong>{{ datos.corto(datos.ingresos - datos.gastos) }}</strong></div>
+          <div class="resumen"><small>Tasa de ahorro</small><strong>{{ datos.porcentaje(datos.ingresos - datos.gastos, datos.ingresos) }}%</strong></div>
+        </div>
+      </section>
+    }
+
+    <div class="fila titulo-seccion"><h2>{{ mostrarTodos ? 'Movimientos' : 'Recientes' }}</h2><button class="enlace" (click)="mostrarTodos = !mostrarTodos">{{ mostrarTodos ? 'Ver menos' : 'Ver todo' }}</button></div>
+    @if (mostrarTodos) {
+      <div class="busqueda">⌕ <ion-input aria-label="Buscar movimiento" placeholder="Buscar movimiento..." [(ngModel)]="busqueda"></ion-input></div>
+      <div class="filtros">
+        <button [class.activo]="filtro === 'todos'" (click)="filtro = 'todos'">Todos</button>
+        <button [class.activo]="filtro === 'ingreso'" (click)="filtro = 'ingreso'">Ingresos</button>
+        <button [class.activo]="filtro === 'gasto'" (click)="filtro = 'gasto'">Gastos</button>
+      </div>
+    }
+    <div class="lista">
+      @for (m of movimientosVisibles; track m) {
+        <div class="movimiento">
+          <span class="emoji" [class.emoji-ingreso]="m.tipo === 'ingreso'">{{ m.emoji }}</span>
+          <div class="detalle"><strong>{{ m.nombre }}</strong><small>{{ m.categoria }} · {{ m.fecha }}</small></div>
+          <strong class="monto" [class.positivo]="m.tipo === 'ingreso'">{{ m.tipo === 'ingreso' ? '+' : '-' }}{{ datos.corto(m.monto) }}</strong>
+        </div>
+      } @empty { <p class="vacio">Sin resultados</p> }
+    </div>
+  </main>
+</ion-content>
+<app-navegacion />
+<ion-toast [isOpen]="!!aviso" [message]="aviso" [duration]="2500" (didDismiss)="aviso = ''"></ion-toast>

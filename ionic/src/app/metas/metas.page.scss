@@ -1,0 +1,15 @@
+:host { display: flex; flex-direction: column; height: 100%; }
+.agregar { display: grid; place-items: center; width: 38px; height: 38px; margin-left: auto; border: 1px solid rgba(0,212,170,.2); border-radius: 12px; background: rgba(0,212,170,.1); color: var(--verde); font-size: 24px; }
+.resumen-grande { margin-bottom: 16px; }
+.resumen-grande .fila { align-items: flex-end; margin-bottom: 17px; }
+.resumen-grande .fila > div { display: flex; flex-direction: column; gap: 4px; }
+.resumen-grande strong { font-family: Outfit, sans-serif; font-size: 27px; font-weight: 800; }
+.resumen-grande .derecha strong { color: var(--suave); font-size: 20px; font-weight: 600; }
+.resumen-grande p { margin-top: 8px; font-size: 11px; }
+.meta { margin-bottom: 3px; }
+.meta .fila:first-child { margin-bottom: 13px; }
+.meta .porcentaje { color: var(--acento); font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+.meta .emoji { background: color-mix(in srgb, var(--acento) 12%, transparent); }
+.boton-punteado { width: 100%; min-height: 55px; margin-top: 15px; border: 1px dashed rgba(0,212,170,.3); border-radius: 15px; background: rgba(0,212,170,.04); color: var(--verde); font-size: 13px; font-weight: 600; }
+.formulario-meta { margin-top: 14px; }
+.formulario-meta ion-input { --color: var(--texto); --placeholder-color: var(--suave); margin: 7px 0; }

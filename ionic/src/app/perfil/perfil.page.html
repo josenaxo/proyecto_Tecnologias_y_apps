@@ -1,0 +1,26 @@
+<ion-content>
+  <main class="pagina">
+    <header class="cabecera"><h1>Mi Perfil</h1></header>
+    <div class="perfil">
+      <div class="avatar">VT</div>
+      <h2>Valentina Torres</h2>
+      <small>vale.torres&#64;gmail.com</small>
+      <div><span>✦ Premium</span><span>Desde Ene 2024</span></div>
+    </div>
+    <div class="estadisticas">
+      <div><strong>{{ datos.cuentas.length }}</strong><small>Cuentas</small></div>
+      <div><strong>{{ datos.metas.length }}</strong><small>Metas</small></div>
+      <div><strong>{{ datos.movimientos.length }}</strong><small>Movimientos</small></div>
+    </div>
+    <div class="lista opciones">
+      <button (click)="aviso = 'No hay notificaciones nuevas.'"><span>🔔</span>Notificaciones<small>Activadas ›</small></button>
+      <button (click)="aviso = 'Seguridad disponible más adelante.'"><span>🔒</span>Seguridad<small>›</small></button>
+      <a routerLink="/cuentas"><span>💳</span>Cuentas vinculadas<small>{{ datos.cuentas.length }} cuentas ›</small></a>
+      <button (click)="aviso = 'El tema oscuro es el diseño actual.'"><span>🌙</span>Tema<small>Oscuro ›</small></button>
+      <button (click)="aviso = 'Exportación disponible más adelante.'"><span>📤</span>Exportar datos<small>›</small></button>
+      <a routerLink="/bienvenida"><span>❓</span>Ayuda y soporte<small>›</small></a>
+    </div>
+  </main>
+</ion-content>
+<app-navegacion />
+<ion-toast [isOpen]="!!aviso" [message]="aviso" [duration]="2500" (didDismiss)="aviso = ''"></ion-toast>

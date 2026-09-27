@@ -1,40 +1,20 @@
-import { Component, ViewChild } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { IonContent, IonFooter, IonInput, IonTabBar, IonToast } from '@ionic/angular';
+import { Injectable } from '@angular/core';
 
-type Pagina = 'bienvenida' | 'inicio' | 'movimientos' | 'cuentas' | 'nuevo' | 'metas' | 'analisis' | 'presupuesto' | 'perfil';
-type Tipo = 'gasto' | 'ingreso';
-type Movimiento = { nombre: string; categoria: string; monto: number; fecha: string; tipo: Tipo; emoji: string };
+export type Tipo = 'gasto' | 'ingreso';
+export type Movimiento = {
+  nombre: string;
+  categoria: string;
+  monto: number;
+  fecha: string;
+  tipo: Tipo;
+  emoji: string;
+};
 
-@Component({
-  selector: 'app-home',
-  templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss'],
-  imports: [FormsModule, IonContent, IonFooter, IonInput, IonTabBar, IonToast],
-})
-export class HomePage {
-  @ViewChild(IonContent) contenido?: IonContent;
-  pagina: Pagina = 'bienvenida';
-  paso = 0;
-  mostrarSaldo = true;
-  filtro: 'todos' | Tipo = 'todos';
-  busqueda = '';
-  periodo: '3m' | '6m' = '6m';
-  aviso = '';
-  nuevoTipo: Tipo = 'gasto';
-  nuevoMonto = '';
-  nuevaCategoria = '';
-  nuevaDescripcion = '';
-  nuevaMeta = '';
-  nuevoObjetivo: number | null = null;
-  mostrarNuevaMeta = false;
-  editarPresupuesto = false;
+@Injectable({ providedIn: 'root' })
+export class FinanzasService {
+  ingresos = 4070000;
+  gastos = 2160000;
 
-  bienvenida = [
-    { emoji: '📊', titulo: 'Visión clara de tu dinero', texto: 'Todos tus ingresos y gastos en un solo lugar, presentados de forma simple e intuitiva.' },
-    { emoji: '🎯', titulo: 'Alcanza tus metas', texto: 'Define objetivos de ahorro y sigue tu progreso paso a paso hasta lograrlos.' },
-    { emoji: '💡', titulo: 'Decisiones más inteligentes', texto: 'Analiza tus hábitos financieros y descubre oportunidades de mejora cada mes.' },
-  ];
   cuentas = [
     { nombre: 'Banco de Chile Ahorro', tipo: 'Cuenta de Ahorro', saldo: 4250000, color: '#00d4aa', ultimos: '4521' },
     { nombre: 'Santander Corriente', tipo: 'Cuenta Corriente', saldo: 1820000, color: '#ffb347', ultimos: '8834' },
@@ -84,63 +64,34 @@ export class HomePage {
     { nombre: 'Jul', ingreso: 4, gasto: 1.7 }, { nombre: 'Ago', ingreso: 3.95, gasto: 2.16 },
   ];
 
-  ingresos = 4070000;
-  gastos = 2160000;
   get balance(): number { return this.cuentas.reduce((total, c) => total + c.saldo, 0); }
   get totalMetas(): number { return this.metas.reduce((total, m) => total + m.actual, 0); }
   get objetivoMetas(): number { return this.metas.reduce((total, m) => total + m.objetivo, 0); }
   get limiteTotal(): number { return this.presupuestos.reduce((total, p) => total + p.limite, 0); }
   get gastadoTotal(): number { return this.presupuestos.reduce((total, p) => total + p.gastado, 0); }
-  get movimientosFiltrados(): Movimiento[] {
-    return this.movimientos.filter(m =>
-      (this.filtro === 'todos' || m.tipo === this.filtro) &&
-      (m.nombre + ' ' + m.categoria).toLowerCase().includes(this.busqueda.toLowerCase()));
-  }
-  get mesesVisibles() { return this.periodo === '3m' ? this.meses.slice(-3) : this.meses; }
 
-  ir(pagina: Pagina): void {
-    this.pagina = pagina;
-    this.aviso = '';
-    this.contenido?.scrollToTop(0);
-  }
   dinero(monto: number): string { return '$' + Math.round(monto).toLocaleString('es-CL'); }
   corto(monto: number): string {
     if (monto >= 1000000) return '$' + Number((monto / 1000000).toFixed(2)) + 'M';
     if (monto >= 1000) return '$' + Math.round(monto / 1000) + 'K';
     return this.dinero(monto);
   }
-  porcentaje(actual: number, total: number): number { return total ? Math.min(Math.round(actual / total * 100), 100) : 0; }
-  tecla(valor: string): void {
-    this.nuevoMonto = valor === '⌫' ? this.nuevoMonto.slice(0, -1) : (this.nuevoMonto + valor).slice(0, 9);
+  porcentaje(actual: number, total: number): number {
+    return total ? Math.min(Math.round(actual / total * 100), 100) : 0;
   }
-  cambiarTipo(tipo: Tipo): void { this.nuevoTipo = tipo; this.nuevaCategoria = ''; }
-  guardarMovimiento(): void {
-    const monto = Number(this.nuevoMonto);
-    if (!monto || !this.nuevaCategoria) { this.aviso = 'Ingresa un monto y selecciona una categoría.'; return; }
-    const categorias = this.nuevoTipo === 'gasto' ? this.categoriasGasto : this.categoriasIngreso;
-    const categoria = categorias.find(c => c.nombre === this.nuevaCategoria)!;
+  agregarMovimiento(nombre: string, categoria: string, monto: number, tipo: Tipo): void {
+    const lista = tipo === 'gasto' ? this.categoriasGasto : this.categoriasIngreso;
+    const emoji = lista.find(c => c.nombre === categoria)?.emoji || '💰';
     this.movimientos.unshift({
-      nombre: this.nuevaDescripcion.trim() || this.nuevaCategoria, categoria: this.nuevaCategoria,
-      monto, tipo: this.nuevoTipo, emoji: categoria.emoji,
+      nombre: nombre.trim() || categoria, categoria, monto, tipo, emoji,
       fecha: new Date().toLocaleDateString('es-CL', { day: 'numeric', month: 'short' }),
     });
-    this.cuentas[0].saldo += this.nuevoTipo === 'ingreso' ? monto : -monto;
-    if (this.nuevoTipo === 'ingreso') this.ingresos += monto;
+    this.cuentas[0].saldo += tipo === 'ingreso' ? monto : -monto;
+    if (tipo === 'ingreso') this.ingresos += monto;
     else {
       this.gastos += monto;
-      const presupuesto = this.presupuestos.find(p => p.nombre === this.nuevaCategoria);
+      const presupuesto = this.presupuestos.find(p => p.nombre === categoria);
       if (presupuesto) presupuesto.gastado += monto;
     }
-    this.nuevoMonto = ''; this.nuevaCategoria = ''; this.nuevaDescripcion = '';
-    this.ir('movimientos');
-    this.aviso = 'Movimiento guardado en esta demostración.';
-  }
-  guardarMeta(): void {
-    if (!this.nuevaMeta.trim() || !this.nuevoObjetivo || this.nuevoObjetivo <= 0) {
-      this.aviso = 'Escribe el nombre y un objetivo mayor que cero.'; return;
-    }
-    this.metas.push({ nombre: this.nuevaMeta.trim(), objetivo: Number(this.nuevoObjetivo), actual: 0,
-      vence: 'Sin fecha', color: '#00d4aa', emoji: '🎯' });
-    this.nuevaMeta = ''; this.nuevoObjetivo = null; this.mostrarNuevaMeta = false;
   }
 }

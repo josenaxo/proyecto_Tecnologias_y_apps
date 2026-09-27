@@ -1,0 +1,13 @@
+:host { display: flex; flex-direction: column; height: 100%; }
+.bienvenida { position: relative; display: flex; flex-direction: column; min-height: 100%; max-width: 480px; padding: calc(env(safe-area-inset-top) + 34px) 27px calc(env(safe-area-inset-bottom) + 40px); margin: auto; background: linear-gradient(160deg, #060b16, #0d1a36 55%, #060b16); }
+.marca { display: flex; align-items: center; gap: 10px; font-family: Outfit, sans-serif; font-size: 20px; font-weight: 700; }
+.marca-icono { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 11px; background: linear-gradient(135deg, #00d4aa, #00a882); color: white; font-size: 24px; }
+.omitir { position: absolute; right: 27px; top: calc(env(safe-area-inset-top) + 44px); color: var(--suave); font-size: 13px; text-decoration: none; }
+.bienvenida-centro { display: flex; flex: 1; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding-bottom: 24px; text-align: center; }
+.ilustracion { display: grid; place-items: center; width: 200px; height: 200px; margin-bottom: 20px; border: 1px solid rgba(0,212,170,.15); border-radius: 25px; background: rgba(0,212,170,.06); box-shadow: inset 0 0 0 16px rgba(0,212,170,.025); }
+.ilustracion span { font-size: 72px; }
+.bienvenida-centro h1 { font-size: 26px; }
+.bienvenida-centro p { max-width: 320px; color: var(--suave); font-size: 14px; line-height: 1.6; }
+.puntos { display: flex; justify-content: center; gap: 8px; margin-bottom: 26px; }
+.puntos button { width: 7px; height: 7px; padding: 0; border-radius: 10px; background: rgba(107,122,153,.35); }
+.puntos button.activo { width: 24px; background: var(--verde); }

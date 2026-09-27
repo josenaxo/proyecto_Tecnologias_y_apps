@@ -1,0 +1,25 @@
+<ion-content>
+  <main class="pagina">
+    <header class="cabecera"><a class="volver" routerLink="/inicio" aria-label="Volver a Inicio">×</a><h1>Nuevo movimiento</h1></header>
+    <div class="selector-tipo">
+      <button [class.activo]="tipo === 'gasto'" (click)="cambiarTipo('gasto')">↓ &nbsp;Gasto</button>
+      <button [class.activo]="tipo === 'ingreso'" (click)="cambiarTipo('ingreso')">↑ &nbsp;Ingreso</button>
+    </div>
+    <div class="entrada-monto"><strong>{{ datos.dinero(+monto || 0) }}</strong><small>Pesos Chilenos (CLP)</small></div>
+    <div class="teclado">
+      @for (n of ['1','2','3','4','5','6','7','8','9','0','⌫']; track n) {
+        <button [class.cero]="n === '0'" (click)="tecla(n)">{{ n }}</button>
+      }
+    </div>
+    <p class="sobrelinea titulo-seccion">CATEGORÍA</p>
+    <div class="categorias">
+      @for (c of categorias; track c) {
+        <button [class.elegida]="categoria === c.nombre" (click)="categoria = c.nombre"><span>{{ c.emoji }}</span>{{ c.nombre }}</button>
+      }
+    </div>
+    <ion-input class="descripcion" aria-label="Descripción" placeholder="Descripción (opcional)" [(ngModel)]="descripcion"></ion-input>
+    <button class="boton-principal" [class.rosa]="tipo === 'gasto'" (click)="guardar()">Guardar movimiento</button>
+  </main>
+</ion-content>
+<app-navegacion />
+<ion-toast [isOpen]="!!aviso" [message]="aviso" [duration]="2500" (didDismiss)="aviso = ''"></ion-toast>

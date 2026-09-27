@@ -1,0 +1,14 @@
+:host { display: flex; flex-direction: column; height: 100%; }
+.perfil { display: flex; align-items: center; flex-direction: column; gap: 5px; padding: 10px 0 20px; }
+.avatar { display: grid; place-items: center; width: 80px; height: 80px; margin-bottom: 8px; border-radius: 20px; background: linear-gradient(135deg, #00d4aa, #00a882); color: white; font-family: Outfit, sans-serif; font-size: 26px; font-weight: 700; }
+.perfil h2 { font-size: 21px; font-weight: 700; }
+.perfil > div:last-child { display: flex; gap: 8px; margin-top: 10px; }
+.perfil > div:last-child span { padding: 5px 10px; border-radius: 20px; background: rgba(0,212,170,.1); color: var(--verde); font-size: 11px; }
+.perfil > div:last-child span:last-child { background: rgba(255,255,255,.05); color: var(--suave); }
+.estadisticas { display: grid; grid-template-columns: repeat(3, 1fr); padding: 14px 0; margin-bottom: 20px; border: 1px solid var(--borde); border-radius: 17px; background: rgba(255,255,255,.03); }
+.estadisticas div { display: flex; align-items: center; flex-direction: column; gap: 4px; }
+.estadisticas div:not(:last-child) { border-right: 1px solid var(--borde); }
+.estadisticas strong { font-family: Outfit, sans-serif; font-size: 20px; }
+.opciones button, .opciones a { display: flex; align-items: center; gap: 12px; min-height: 54px; padding: 12px 15px; border: 1px solid var(--borde); border-radius: 15px; background: rgba(255,255,255,.03); color: var(--texto); text-align: left; text-decoration: none; font-size: 13px; }
+.opciones span { font-size: 20px; }
+.opciones small { margin-left: auto; }

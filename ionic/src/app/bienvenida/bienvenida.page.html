@@ -1,0 +1,21 @@
+<ion-content>
+  <main class="bienvenida">
+    <div class="marca"><span class="marca-icono">↗</span> FinSight</div>
+    @if (paso < 2) { <a class="omitir" routerLink="/inicio">Omitir</a> }
+    <div class="bienvenida-centro">
+      <div class="ilustracion"><span>{{ slides[paso].emoji }}</span></div>
+      <h1>{{ slides[paso].titulo }}</h1>
+      <p>{{ slides[paso].texto }}</p>
+    </div>
+    <div class="puntos">
+      @for (slide of slides; track slide; let i = $index) {
+        <button [class.activo]="paso === i" [attr.aria-label]="'Ir a la diapositiva ' + (i + 1)" (click)="paso = i"></button>
+      }
+    </div>
+    @if (paso < 2) {
+      <button class="boton-principal" (click)="paso = paso + 1">Continuar</button>
+    } @else {
+      <a class="boton-principal" routerLink="/inicio">Comenzar ahora</a>
+    }
+  </main>
+</ion-content>

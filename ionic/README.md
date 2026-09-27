@@ -14,11 +14,13 @@ Abre la dirección local indicada por Angular. Para comprobar la compilación: `
 
 ## Estructura para presentar
 
-- `src/app/home/home.page.html`: las nueve vistas. `@switch` muestra una, `@for` recorre los datos y `@if` muestra elementos opcionales.
-- `src/app/home/home.page.ts`: datos de ejemplo y acciones de la interfaz. `pagina` guarda la vista actual; `ir()` la cambia. `[(ngModel)]` conecta los campos con variables.
-- `src/app/home/home.page.scss`: colores, tarjetas, gráficos simples y adaptación al tamaño del teléfono.
-- `src/app/app.routes.ts`: ruta inicial. `app.component.html` contiene el espacio donde Ionic muestra la página.
+Hay seis páginas: `bienvenida`, `inicio`, `cuentas`, `nuevo`, `metas` y `perfil`. Cada carpeta tiene un `.page.ts` para el estado y las acciones, un `.page.html` para la vista y un `.page.scss` para sus estilos.
 
-Las tarjetas de resumen representan un mes completo; la lista contiene solo movimientos recientes de ejemplo. Se puede agregar un movimiento, crear una meta, editar límites y usar filtros. Estos cambios viven en memoria y se reinician al recargar. Los botones que requieren servicios futuros muestran un aviso.
+- `src/app/app.routes.ts` asigna una URL a cada página. `/` lleva a Bienvenida y el antiguo `/home` redirige a Inicio.
+- `src/app/navegacion` contiene la barra inferior. Sus enlaces usan `routerLink`; `routerLinkActive` marca la página actual.
+- `src/app/finanzas.service.ts` conserva los datos de ejemplo para que se compartan entre páginas. No hay base de datos.
+- `src/global.scss` contiene los colores y estilos que se repiten.
 
-Referencia del ramo: https://udd-web-mobile.vercel.app/aprende
+Para mantener seis páginas, la lista completa y el análisis se despliegan dentro de Inicio. El presupuesto usa la misma ruta de Cuentas con `?presupuesto=1`; su botón «volver» regresa a la vista de cuentas. El formulario Nuevo guarda un movimiento en memoria y vuelve a Inicio. `[(ngModel)]` conecta los campos con las variables; `@for` dibuja listas y `@if` muestra las secciones opcionales.
+
+Los datos se reinician al recargar. Las funciones que requieren servicios futuros muestran un aviso.

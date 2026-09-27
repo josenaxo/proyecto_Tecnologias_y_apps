@@ -1,0 +1,29 @@
+<ion-content>
+  <main class="pagina">
+    <header class="cabecera"><h1>Metas de Ahorro</h1><button class="agregar" aria-label="Nueva meta" (click)="mostrarFormulario = !mostrarFormulario">＋</button></header>
+    <section class="tarjeta resumen-grande">
+      <div class="fila"><div><small>Total ahorrado</small><strong>{{ datos.corto(datos.totalMetas) }}</strong></div><div class="derecha"><small>Meta total</small><strong>{{ datos.corto(datos.objetivoMetas) }}</strong></div></div>
+      <div class="barra"><span [style.width.%]="datos.porcentaje(datos.totalMetas, datos.objetivoMetas)"></span></div>
+      <p class="verde">{{ datos.porcentaje(datos.totalMetas, datos.objetivoMetas) }}% del objetivo total alcanzado</p>
+    </section>
+    <div class="lista">
+      @for (m of datos.metas; track m) {
+        <section class="tarjeta meta" [style.--acento]="m.color">
+          <div class="fila"><span class="emoji">{{ m.emoji }}</span><div class="detalle"><strong>{{ m.nombre }}</strong><small>Vence: {{ m.vence }}</small></div><strong class="porcentaje">{{ datos.porcentaje(m.actual, m.objetivo) }}%</strong></div>
+          <div class="barra"><span [style.width.%]="datos.porcentaje(m.actual, m.objetivo)"></span></div>
+          <div class="fila cifras"><span>{{ datos.corto(m.actual) }} <small>de {{ datos.corto(m.objetivo) }}</small></span><small>Faltan {{ datos.corto(m.objetivo - m.actual) }}</small></div>
+        </section>
+      }
+    </div>
+    @if (mostrarFormulario) {
+      <section class="tarjeta formulario-meta">
+        <h2>Nueva meta de ahorro</h2>
+        <ion-input label="Nombre" label-placement="stacked" [(ngModel)]="nombre"></ion-input>
+        <ion-input type="number" label="Objetivo en CLP" label-placement="stacked" [(ngModel)]="objetivo"></ion-input>
+        <button class="boton-principal" (click)="guardar()">Guardar meta</button>
+      </section>
+    } @else { <button class="boton-punteado" (click)="mostrarFormulario = true">＋ Nueva meta de ahorro</button> }
+  </main>
+</ion-content>
+<app-navegacion />
+<ion-toast [isOpen]="!!aviso" [message]="aviso" [duration]="2500" (didDismiss)="aviso = ''"></ion-toast>

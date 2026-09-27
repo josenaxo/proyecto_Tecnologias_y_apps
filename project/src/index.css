@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'Outfit', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #030508;
+  color: #f0f6ff;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+input::placeholder {
+  color: #6b7a99;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}

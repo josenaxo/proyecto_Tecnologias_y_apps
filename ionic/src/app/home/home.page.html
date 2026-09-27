@@ -1,0 +1,306 @@
+@if (pagina !== 'bienvenida') {
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>{{ pagina === 'inicio' ? 'FinSight' :
+        pagina === 'nuevo' ? 'Nuevo movimiento' :
+        pagina === 'movimientos' ? 'Movimientos' :
+        pagina === 'cuentas' ? 'Mis cuentas' :
+        pagina === 'metas' ? 'Metas de ahorro' :
+        pagina === 'analisis' ? 'Análisis' :
+        pagina === 'presupuesto' ? 'Presupuesto' : 'Mi perfil' }}</ion-title>
+      @if (pagina !== 'inicio') {
+        <ion-buttons slot="start">
+          <ion-button (click)="ir('inicio')">‹</ion-button>
+        </ion-buttons>
+      }
+    </ion-toolbar>
+  </ion-header>
+}
+
+<ion-content>
+  @switch (pagina) {
+    @case ('bienvenida') {
+      <div class="bienvenida">
+        <p class="marca">FinSight</p>
+        <div class="bienvenida-centro">
+          <div class="gran-emoji">{{ bienvenida[pasoBienvenida].emoji }}</div>
+          <h1>{{ bienvenida[pasoBienvenida].titulo }}</h1>
+          <p>{{ bienvenida[pasoBienvenida].texto }}</p>
+        </div>
+        <div class="bienvenida-pie">
+          <p>{{ pasoBienvenida + 1 }} de 3</p>
+          <ion-button expand="block" (click)="pasoBienvenida < 2 ? pasoBienvenida = pasoBienvenida + 1 : ir('inicio')">
+            {{ pasoBienvenida < 2 ? 'Continuar' : 'Comenzar ahora' }}
+          </ion-button>
+          <ion-button fill="clear" (click)="ir('inicio')">Omitir</ion-button>
+        </div>
+      </div>
+    }
+
+    @case ('inicio') {
+      <div class="pagina">
+        <div class="saludo">
+          <div class="avatar">VT</div>
+          <div><p class="subtitulo">Buenos días,</p><h2>Valentina</h2></div>
+        </div>
+        <ion-card class="balance-card">
+          <ion-card-content>
+            <div class="fila-separada">
+              <span class="etiqueta">BALANCE TOTAL</span>
+              <ion-button size="small" fill="clear" (click)="mostrarSaldo = !mostrarSaldo">
+                {{ mostrarSaldo ? 'Ocultar' : 'Mostrar' }}
+              </ion-button>
+            </div>
+            <h1>{{ mostrarSaldo ? dinero(balance) : '••••••' }} <small>CLP</small></h1>
+            <p class="subtitulo">Suma de tus cuentas de ejemplo</p>
+            <ion-grid>
+              <ion-row>
+                <ion-col><div class="resumen ingreso"><span>Ingresos</span><strong>{{ mostrarSaldo ? dinero(ingresos) : '••••' }}</strong></div></ion-col>
+                <ion-col><div class="resumen gasto"><span>Gastos</span><strong>{{ mostrarSaldo ? dinero(gastos) : '••••' }}</strong></div></ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+        <ion-grid class="accesos">
+          <ion-row>
+            <ion-col size="4"><ion-button expand="block" fill="outline" (click)="ir('analisis')">📊<br>Análisis</ion-button></ion-col>
+            <ion-col size="4"><ion-button expand="block" fill="outline" (click)="ir('metas')">🎯<br>Metas</ion-button></ion-col>
+            <ion-col size="4"><ion-button expand="block" fill="outline" (click)="ir('presupuesto')">📋<br>Presupuesto</ion-button></ion-col>
+          </ion-row>
+        </ion-grid>
+        <div class="fila-separada titulo-seccion">
+          <h2>Recientes</h2>
+          <ion-button fill="clear" size="small" (click)="ir('movimientos')">Ver todo</ion-button>
+        </div>
+        <ion-list>
+          @for (m of movimientos.slice(0, 5); track m) {
+            <ion-item>
+              <span slot="start" class="emoji">{{ m.emoji }}</span>
+              <ion-label><h3>{{ m.nombre }}</h3><p>{{ m.categoria }} · {{ m.fecha }}</p></ion-label>
+              <strong slot="end" [class.positivo]="m.tipo === 'ingreso'" [class.negativo]="m.tipo === 'gasto'">
+                {{ m.tipo === 'ingreso' ? '+' : '-' }}{{ dinero(m.monto) }}
+              </strong>
+            </ion-item>
+          }
+        </ion-list>
+      </div>
+    }
+
+    @case ('movimientos') {
+      <div class="pagina">
+        <ion-grid>
+          <ion-row>
+            <ion-col><div class="resumen ingreso"><span>Total ingresos</span><strong>{{ dinero(ingresos) }}</strong></div></ion-col>
+            <ion-col><div class="resumen gasto"><span>Total gastos</span><strong>{{ dinero(gastos) }}</strong></div></ion-col>
+          </ion-row>
+        </ion-grid>
+        <ion-input label="Buscar" labelPlacement="floating" placeholder="Nombre o categoría"
+          [(ngModel)]="busqueda"></ion-input>
+        <ion-segment [(ngModel)]="filtro">
+          <ion-segment-button value="todos">Todos</ion-segment-button>
+          <ion-segment-button value="ingreso">Ingresos</ion-segment-button>
+          <ion-segment-button value="gasto">Gastos</ion-segment-button>
+        </ion-segment>
+        <ion-list>
+          @for (m of movimientosFiltrados; track m) {
+            <ion-item>
+              <span slot="start" class="emoji">{{ m.emoji }}</span>
+              <ion-label><h3>{{ m.nombre }}</h3><p>{{ m.categoria }} · {{ m.fecha }}</p></ion-label>
+              <strong slot="end" [class.positivo]="m.tipo === 'ingreso'" [class.negativo]="m.tipo === 'gasto'">
+                {{ m.tipo === 'ingreso' ? '+' : '-' }}{{ dinero(m.monto) }}
+              </strong>
+            </ion-item>
+          } @empty {
+            <p class="vacio">No hay movimientos con ese filtro.</p>
+          }
+        </ion-list>
+      </div>
+    }
+
+    @case ('cuentas') {
+      <div class="pagina">
+        <ion-card class="balance-card">
+          <ion-card-content>
+            <span class="etiqueta">PATRIMONIO DE EJEMPLO</span>
+            <h1>{{ dinero(balance) }}</h1>
+            <p class="subtitulo">{{ cuentas.length }} cuentas</p>
+          </ion-card-content>
+        </ion-card>
+        <h2 class="titulo-seccion">Cuentas vinculadas</h2>
+        <ion-list>
+          @for (c of cuentas; track c) {
+            <ion-item>
+              <span slot="start" class="emoji">{{ c.emoji }}</span>
+              <ion-label><h3>{{ c.nombre }}</h3><p>{{ c.detalle }}</p></ion-label>
+              <strong slot="end">{{ dinero(c.saldo) }}</strong>
+            </ion-item>
+          }
+        </ion-list>
+        <ion-button expand="block" fill="outline" (click)="ir('presupuesto')">Ver presupuesto</ion-button>
+      </div>
+    }
+
+    @case ('nuevo') {
+      <div class="pagina">
+        <ion-segment [value]="nuevoTipo" (ionChange)="cambiarTipo($event.detail.value === 'ingreso' ? 'ingreso' : 'gasto')">
+          <ion-segment-button value="gasto">Gasto</ion-segment-button>
+          <ion-segment-button value="ingreso">Ingreso</ion-segment-button>
+        </ion-segment>
+        <ion-list>
+          <ion-item><ion-input label="Nombre" labelPlacement="stacked" placeholder="Ej. Supermercado"
+            [(ngModel)]="nuevoNombre"></ion-input></ion-item>
+          <ion-item><ion-input type="number" min="1" label="Monto en CLP" labelPlacement="stacked"
+            placeholder="0" [(ngModel)]="nuevoMonto"></ion-input></ion-item>
+          <ion-item>
+            <ion-select label="Categoría" labelPlacement="stacked" placeholder="Seleccionar"
+              [(ngModel)]="nuevaCategoria">
+              @for (categoria of (nuevoTipo === 'gasto' ? categoriasGasto : categoriasIngreso); track categoria) {
+                <ion-select-option [value]="categoria">{{ categoria }}</ion-select-option>
+              }
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-select label="Cuenta" labelPlacement="stacked" [(ngModel)]="nuevaCuenta">
+              @for (cuenta of cuentas; track $index) {
+                <ion-select-option [value]="$index">{{ cuenta.nombre }}</ion-select-option>
+              }
+            </ion-select>
+          </ion-item>
+        </ion-list>
+        <ion-button class="boton-principal" expand="block" (click)="guardarMovimiento()">Guardar movimiento</ion-button>
+        <p class="nota">Los cambios duran hasta que recargues la aplicación.</p>
+      </div>
+    }
+
+    @case ('metas') {
+      <div class="pagina">
+        <ion-card class="balance-card">
+          <ion-card-content>
+            <span class="etiqueta">TOTAL AHORRADO</span>
+            <h1>{{ dinero(totalMetas) }}</h1>
+            <p>Meta total: {{ dinero(objetivoMetas) }}</p>
+            <ion-progress-bar [value]="porcentaje(totalMetas, objetivoMetas)"></ion-progress-bar>
+          </ion-card-content>
+        </ion-card>
+        <ion-list>
+          @for (meta of metas; track meta; let i = $index) {
+            <ion-item class="item-meta">
+              <span slot="start" class="emoji">{{ meta.emoji }}</span>
+              <ion-label>
+                <h3>{{ meta.nombre }}</h3>
+                <p>{{ dinero(meta.actual) }} de {{ dinero(meta.objetivo) }} · {{ meta.vence }}</p>
+                <ion-progress-bar [value]="porcentaje(meta.actual, meta.objetivo)"></ion-progress-bar>
+              </ion-label>
+              <ion-button slot="end" fill="clear" size="small" (click)="metaParaAbonar = i">Abonar</ion-button>
+            </ion-item>
+          }
+        </ion-list>
+        @if (metaParaAbonar >= 0) {
+          <ion-card><ion-card-content>
+            <h3>Abonar a {{ metas[metaParaAbonar].nombre }}</h3>
+            <ion-input type="number" min="1" label="Monto en CLP" labelPlacement="stacked"
+              [(ngModel)]="montoAbono"></ion-input>
+            <ion-button (click)="abonarMeta()">Agregar abono</ion-button>
+            <ion-button fill="clear" (click)="metaParaAbonar = -1">Cancelar</ion-button>
+          </ion-card-content></ion-card>
+        }
+        <h2 class="titulo-seccion">Nueva meta</h2>
+        <ion-list>
+          <ion-item><ion-input label="Nombre" labelPlacement="stacked" [(ngModel)]="nuevaMetaNombre"></ion-input></ion-item>
+          <ion-item><ion-input type="number" min="1" label="Objetivo en CLP" labelPlacement="stacked"
+            [(ngModel)]="nuevaMetaObjetivo"></ion-input></ion-item>
+        </ion-list>
+        <ion-button expand="block" fill="outline" (click)="guardarMeta()">Agregar meta</ion-button>
+      </div>
+    }
+
+    @case ('analisis') {
+      <div class="pagina">
+        <ion-grid><ion-row>
+          <ion-col><div class="resumen ingreso"><span>Ahorro neto</span><strong>{{ dinero(ingresos - gastos) }}</strong></div></ion-col>
+          <ion-col><div class="resumen"><span>Tasa de ahorro</span><strong>{{ ingresos ? ((ingresos - gastos) / ingresos * 100).toFixed(0) : 0 }}%</strong></div></ion-col>
+        </ion-row></ion-grid>
+        <h2 class="titulo-seccion">Ingresos vs gastos</h2>
+        <ion-card><ion-card-content>
+          <div class="barra-leyenda"><span>Ingresos</span><strong>{{ dinero(ingresos) }}</strong></div>
+          <ion-progress-bar [value]="1"></ion-progress-bar>
+          <div class="barra-leyenda"><span>Gastos</span><strong>{{ dinero(gastos) }}</strong></div>
+          <ion-progress-bar color="danger" [value]="porcentaje(gastos, ingresos)"></ion-progress-bar>
+        </ion-card-content></ion-card>
+        <h2 class="titulo-seccion">Gastos por categoría</h2>
+        <ion-list>
+          @for (p of presupuestos; track p) {
+            <ion-item>
+              <span slot="start" class="emoji">{{ p.emoji }}</span>
+              <ion-label>{{ p.categoria }}</ion-label>
+              <strong slot="end">{{ dinero(gastadoEn(p.categoria)) }}</strong>
+            </ion-item>
+          }
+        </ion-list>
+        <p class="nota">Análisis de los movimientos de ejemplo y los que agregues.</p>
+      </div>
+    }
+
+    @case ('presupuesto') {
+      <div class="pagina">
+        <ion-card class="balance-card"><ion-card-content>
+          <span class="etiqueta">PRESUPUESTO TOTAL</span>
+          <h1>{{ dinero(limiteTotal) }}</h1>
+          <p>Gastado: {{ dinero(gastos) }} · Disponible: {{ dinero(limiteTotal - gastos) }}</p>
+          <ion-progress-bar [value]="porcentaje(gastos, limiteTotal)"></ion-progress-bar>
+        </ion-card-content></ion-card>
+        <div class="fila-separada titulo-seccion">
+          <h2>Por categoría</h2>
+          <ion-button fill="clear" size="small" (click)="editarPresupuestos = !editarPresupuestos">
+            {{ editarPresupuestos ? 'Listo' : 'Editar' }}
+          </ion-button>
+        </div>
+        <ion-list>
+          @for (p of presupuestos; track p) {
+            <ion-item class="item-presupuesto">
+              <span slot="start" class="emoji">{{ p.emoji }}</span>
+              <ion-label>
+                <h3>{{ p.categoria }}</h3>
+                <p>{{ dinero(gastadoEn(p.categoria)) }} de {{ dinero(p.limite) }}</p>
+                <ion-progress-bar [color]="gastadoEn(p.categoria) > p.limite ? 'danger' : 'primary'"
+                  [value]="porcentaje(gastadoEn(p.categoria), p.limite)"></ion-progress-bar>
+              </ion-label>
+            </ion-item>
+            @if (editarPresupuestos) {
+              <ion-item><ion-input type="number" min="1" [label]="'Límite de ' + p.categoria"
+                labelPlacement="stacked" [(ngModel)]="p.limite"></ion-input></ion-item>
+            }
+          }
+        </ion-list>
+      </div>
+    }
+
+    @case ('perfil') {
+      <div class="pagina">
+        <div class="perfil-cabecera"><div class="avatar">VT</div><div><h2>Valentina Torres</h2><p>Perfil de demostración</p></div></div>
+        <ion-list>
+          <ion-item><ion-label>🌙 Tema oscuro</ion-label>
+            <ion-toggle slot="end" [(ngModel)]="modoOscuro" (ionChange)="aviso = 'Preferencia visual de demostración.'"></ion-toggle></ion-item>
+          <ion-item><ion-label>🔔 Notificaciones</ion-label>
+            <ion-toggle slot="end" [(ngModel)]="notificaciones" (ionChange)="aviso = 'Preferencia de demostración.'"></ion-toggle></ion-item>
+          <ion-item button (click)="exportarCSV()"><ion-label>📤 Exportar movimientos CSV</ion-label></ion-item>
+          <ion-item button (click)="pasoBienvenida = 0; ir('bienvenida')"><ion-label>❓ Ver bienvenida</ion-label></ion-item>
+        </ion-list>
+        <p class="nota">Las cuentas y el perfil son datos de ejemplo. El acceso real y la sincronización quedan para la etapa de base de datos.</p>
+      </div>
+    }
+  }
+</ion-content>
+
+@if (pagina !== 'bienvenida') {
+  <ion-footer>
+    <ion-tab-bar>
+      <ion-tab-button [selected]="pagina === 'inicio'" (click)="ir('inicio')"><span>⌂</span>Inicio</ion-tab-button>
+      <ion-tab-button [selected]="pagina === 'cuentas'" (click)="ir('cuentas')"><span>▣</span>Cuentas</ion-tab-button>
+      <ion-tab-button [selected]="pagina === 'nuevo'" (click)="ir('nuevo')"><span class="mas">＋</span>Nuevo</ion-tab-button>
+      <ion-tab-button [selected]="pagina === 'metas'" (click)="ir('metas')"><span>◎</span>Metas</ion-tab-button>
+      <ion-tab-button [selected]="pagina === 'perfil'" (click)="ir('perfil')"><span>◯</span>Perfil</ion-tab-button>
+    </ion-tab-bar>
+  </ion-footer>
+}
+<ion-toast [isOpen]="!!aviso" [message]="aviso" [duration]="2500" (didDismiss)="aviso = ''"></ion-toast>

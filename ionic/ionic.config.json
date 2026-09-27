@@ -1,0 +1,7 @@
+{
+  "name": "finsight",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

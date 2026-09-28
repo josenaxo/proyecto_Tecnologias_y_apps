@@ -13,24 +13,25 @@ $RECYCLE.BIN/
 log.txt
 
 
-/.sourcemaps
-/.versions
-/coverage
+# App paths are relative to this root .gitignore.
+/ionic/.sourcemaps/
+/ionic/.versions/
+/ionic/coverage/
 
 # Ionic
-/.ionic
-/www
-/platforms
-/plugins
+/ionic/.ionic/
+www/
+/ionic/platforms/
+/ionic/plugins/
 
 # Compiled output
-/dist
-/tmp
-/out-tsc
-/bazel-out
+/ionic/dist/
+/ionic/tmp/
+/ionic/out-tsc/
+/ionic/bazel-out/
 
 # Node
-/node_modules
+node_modules/
 npm-debug.log
 yarn-error.log
 
@@ -45,25 +46,18 @@ yarn-error.log
 *.sublime-workspace
 
 # Visual Studio Code
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-.history/*
+.vscode/
+
 
 
 # Miscellaneous
-/.angular
-/.angular/cache
+.angular/
 .sass-cache/
-/.nx
-/.nx/cache
-/connect.lock
-/coverage
-/libpeerconnection.log
+/ionic/.nx/
+/ionic/connect.lock
+/ionic/libpeerconnection.log
 testem.log
-/typings
+/ionic/typings/
 
 # System files
 .DS_Store

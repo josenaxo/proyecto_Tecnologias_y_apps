@@ -1,7 +1,7 @@
 <ion-content>
   <main class="bienvenida">
     <div class="marca"><span class="marca-icono">↗</span> FinSight</div>
-    @if (paso < 2) { <a class="omitir" routerLink="/inicio">Omitir</a> }
+    @if (paso < 2) { <button class="omitir" (click)="paso = 2">Omitir</button> }
     <div class="bienvenida-centro">
       <div class="ilustracion"><span>{{ slides[paso].emoji }}</span></div>
       <h1>{{ slides[paso].titulo }}</h1>
@@ -14,8 +14,16 @@
     </div>
     @if (paso < 2) {
       <button class="boton-principal" (click)="paso = paso + 1">Continuar</button>
+    } @else if (!supabase.configurado) {
+      <p class="aviso">Configura la URL y la clave pública de Supabase en los archivos environment para conectar la app.</p>
     } @else {
-      <a class="boton-principal" routerLink="/inicio">Comenzar ahora</a>
+      <form class="formulario-acceso" (ngSubmit)="autenticar()">
+        <input type="email" name="email" placeholder="Correo electrónico" autocomplete="email" required [(ngModel)]="email">
+        <input type="password" name="password" placeholder="Contraseña" [attr.autocomplete]="registro ? 'new-password' : 'current-password'" minlength="6" required [(ngModel)]="password">
+        @if (aviso) { <p class="aviso">{{ aviso }}</p> }
+        <button class="boton-principal" type="submit" [disabled]="cargando">{{ cargando ? 'Conectando…' : registro ? 'Crear cuenta' : 'Iniciar sesión' }}</button>
+        <button class="cambiar-acceso" type="button" (click)="registro = !registro; aviso = ''">{{ registro ? 'Ya tengo cuenta' : 'Crear una cuenta' }}</button>
+      </form>
     }
   </main>
 </ion-content>

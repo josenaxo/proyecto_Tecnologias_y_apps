@@ -1,44 +1,55 @@
 <ion-content>
   <main class="pagina">
+    @if (datos.error) { <p class="error-datos">No se pudieron cargar los datos: {{ datos.error }}</p> }
     @if (mostrarPresupuesto) {
       <header class="cabecera"><a class="volver" routerLink="/cuentas" aria-label="Volver a Cuentas">‹</a><h1>Presupuesto</h1></header>
     } @else {
-      <header class="cabecera"><h1>Mis Cuentas</h1><button class="agregar" aria-label="Agregar cuenta" (click)="aviso = 'Agregar cuentas estará disponible más adelante.'">＋</button></header>
+      <header class="cabecera"><h1>Mis Cuentas</h1><button class="agregar" aria-label="Agregar cuenta" (click)="mostrarCuenta = !mostrarCuenta">＋</button></header>
     }
     @if (!mostrarPresupuesto) {
     <div class="grafico-cuentas">
-      <div class="donut"><div><strong>{{ datos.corto(datos.balance) }}</strong><small>patrimonio</small></div></div>
+      <div class="donut" [style.background]="graficoCuentas"><div><strong>{{ datos.corto(datos.balance) }}</strong><small>patrimonio</small></div></div>
       <div class="leyenda">
-        @for (c of datos.cuentas; track c) {
+        @for (c of datos.cuentas; track c.id) {
           <div><i [style.background]="c.color"></i><span><strong>{{ c.nombre }}</strong><small>{{ datos.porcentaje(c.saldo, datos.balance) }}% · {{ datos.corto(c.saldo) }}</small></span></div>
         }
       </div>
     </div>
-    <p class="sobrelinea titulo-seccion">CUENTAS VINCULADAS</p>
+    <p class="sobrelinea titulo-seccion">MIS CUENTAS</p>
     <div class="lista">
-      @for (c of datos.cuentas; track c) {
+      @for (c of datos.cuentas; track c.id) {
         <div class="cuenta">
           <span class="cuenta-icono" [style.color]="c.color" [style.background]="c.color + '18'">●</span>
-          <div class="detalle"><strong>{{ c.nombre }}</strong><small>{{ c.tipo }} · {{ c.ultimos === '—' ? '—' : '****' + c.ultimos }}</small></div>
+          <div class="detalle"><strong>{{ c.nombre }}</strong><small>{{ c.tipo }}</small></div>
           <strong class="monto neutro">{{ datos.corto(c.saldo) }}</strong>
         </div>
       }
+      @if (!datos.cuentas.length) { <p class="vacio">Agrega tu primera cuenta para comenzar.</p> }
     </div>
+    @if (mostrarCuenta) {
+      <section class="tarjeta formulario-cuenta">
+        <h2>Nueva cuenta</h2>
+        <ion-input label="Nombre" label-placement="stacked" [(ngModel)]="nombre"></ion-input>
+        <ion-input label="Tipo" label-placement="stacked" [(ngModel)]="tipo"></ion-input>
+        <ion-input type="number" label="Saldo inicial en CLP" label-placement="stacked" [(ngModel)]="saldo"></ion-input>
+        <button class="boton-principal" [disabled]="guardando" (click)="agregarCuenta()">Guardar cuenta</button>
+      </section>
+    }
     <a class="boton-contorno" routerLink="/cuentas" [queryParams]="{ presupuesto: 1 }">Ver presupuesto por categoría ›</a>
     } @else {
       <section class="presupuesto-seccion">
-        <div class="fila titulo-seccion"><h2>Presupuesto · Agosto 2026</h2><button class="enlace" (click)="editarPresupuesto = !editarPresupuesto">{{ editarPresupuesto ? 'Listo' : 'Editar' }}</button></div>
+        <div class="fila titulo-seccion"><h2>Presupuesto mensual</h2><button class="enlace" [disabled]="guardando" (click)="alternarEdicion()">{{ editarPresupuesto ? 'Guardar' : 'Editar' }}</button></div>
         <div class="tarjeta resumen-grande">
           <div class="fila"><div><small>Gastado</small><strong>{{ datos.corto(datos.gastadoTotal) }}</strong></div><div class="derecha"><small>Disponible</small><strong class="verde">{{ datos.corto(datos.limiteTotal - datos.gastadoTotal) }}</strong></div></div>
           <div class="barra"><span [style.width.%]="datos.porcentaje(datos.gastadoTotal, datos.limiteTotal)"></span></div>
           <div class="fila cifras"><small>{{ datos.porcentaje(datos.gastadoTotal, datos.limiteTotal) }}% del presupuesto</small><small>de {{ datos.corto(datos.limiteTotal) }}</small></div>
         </div>
         <div class="lista">
-          @for (p of datos.presupuestos; track p) {
+          @for (p of datos.presupuestos; track p.nombre; let i = $index) {
             <div class="tarjeta presupuesto" [style.--acento]="p.color">
               <div class="fila"><span class="emoji">{{ p.emoji }}</span><div class="detalle"><strong>{{ p.nombre }}</strong><small>{{ datos.corto(p.gastado) }} de {{ datos.corto(p.limite) }}</small></div>@if (datos.porcentaje(p.gastado, p.limite) >= 88) { <span class="limite">Casi límite</span> }</div>
               <div class="barra"><span [style.width.%]="datos.porcentaje(p.gastado, p.limite)"></span></div>
-              @if (editarPresupuesto) { <ion-input type="number" [label]="'Límite de ' + p.nombre" label-placement="stacked" [(ngModel)]="p.limite"></ion-input> }
+              @if (editarPresupuesto) { <ion-input type="number" [label]="'Límite de ' + p.nombre" label-placement="stacked" [(ngModel)]="limitesEditables[i].limite"></ion-input> }
             </div>
           }
         </div>

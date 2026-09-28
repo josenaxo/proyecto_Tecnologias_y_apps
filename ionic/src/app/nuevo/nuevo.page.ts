@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { IonContent, IonInput, IonToast } from '@ionic/angular';
@@ -13,11 +13,14 @@ import { NavegacionComponent } from '../navegacion/navegacion.component';
 })
 export class NuevoPage {
   datos = inject(FinanzasService);
+  private cambios = inject(ChangeDetectorRef);
   private router = inject(Router);
   tipo: Tipo = 'gasto';
   monto = '';
   categoria = '';
   descripcion = '';
+  cuentaId = '';
+  guardando = false;
   aviso = '';
 
   get categorias() { return this.tipo === 'gasto' ? this.datos.categoriasGasto : this.datos.categoriasIngreso; }
@@ -25,13 +28,22 @@ export class NuevoPage {
   tecla(valor: string): void {
     this.monto = valor === '⌫' ? this.monto.slice(0, -1) : (this.monto + valor).slice(0, 9);
   }
-  guardar(): void {
+  async guardar(): Promise<void> {
     const monto = Number(this.monto);
-    if (!monto || !this.categoria) {
-      this.aviso = 'Ingresa un monto y selecciona una categoría.';
+    const cuentaId = this.cuentaId || this.datos.cuentas[0]?.id;
+    if (!monto || !this.categoria || !cuentaId) {
+      this.aviso = 'Ingresa monto, categoría y una cuenta.';
       return;
     }
-    this.datos.agregarMovimiento(this.descripcion, this.categoria, monto, this.tipo);
-    this.router.navigateByUrl('/inicio');
+    this.guardando = true;
+    try {
+      await this.datos.agregarMovimiento(this.descripcion, this.categoria, monto, this.tipo, cuentaId);
+      await this.router.navigateByUrl('/inicio');
+    } catch (error) {
+      this.aviso = error instanceof Error ? error.message : 'No se pudo guardar el movimiento.';
+    } finally {
+      this.guardando = false;
+      this.cambios.markForCheck();
+    }
   }
 }

@@ -2,7 +2,7 @@
 .agregar { display: grid; place-items: center; width: 38px; height: 38px; margin-left: auto; border: 1px solid rgba(0,212,170,.2); border-radius: 12px; background: rgba(0,212,170,.1); color: var(--verde); font-size: 24px; }
 .volver { display: grid; place-items: center; width: 38px; height: 38px; flex: none; border-radius: 12px; background: rgba(255,255,255,.05); color: var(--texto); font-size: 24px; text-decoration: none; }
 .grafico-cuentas { display: flex; align-items: center; gap: 15px; margin: 10px 0 25px; }
-.donut { display: grid; place-items: center; flex: none; width: 140px; height: 140px; border-radius: 50%; background: conic-gradient(#00d4aa 0 28%, #ffb347 28% 40%, #a78bfa 40% 43%, #ff5a7e 43% 100%); }
+.donut { display: grid; place-items: center; flex: none; width: 140px; height: 140px; border-radius: 50%; }
 .donut > div { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 105px; height: 105px; border-radius: 50%; background: var(--fondo); }
 .donut strong { font-family: Outfit, sans-serif; font-size: 17px; }
 .leyenda { display: flex; flex-direction: column; gap: 9px; min-width: 0; }
@@ -23,4 +23,6 @@
 .presupuesto .emoji { background: color-mix(in srgb, var(--acento) 12%, transparent); }
 .limite { padding: 4px 7px; border-radius: 15px; background: rgba(255,90,126,.15); color: var(--rosa); font-size: 9px; }
 .presupuesto ion-input { --color: var(--texto); --placeholder-color: var(--suave); margin-top: 8px; }
+.formulario-cuenta { display: grid; gap: 9px; margin-top: 15px; }
+.formulario-cuenta h2 { margin-bottom: 0; }
 @media (max-width: 360px) { .grafico-cuentas { gap: 9px; } .donut { width: 125px; height: 125px; } .donut > div { width: 92px; height: 92px; } }

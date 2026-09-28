@@ -11,3 +11,9 @@
 .puntos { display: flex; justify-content: center; gap: 8px; margin-bottom: 26px; }
 .puntos button { width: 7px; height: 7px; padding: 0; border-radius: 10px; background: rgba(107,122,153,.35); }
 .puntos button.activo { width: 24px; background: var(--verde); }
+.omitir { border: 0; background: none; }
+.formulario-acceso { display: grid; gap: 12px; }
+.formulario-acceso input { width: 100%; padding: 15px; border: 1px solid var(--borde); border-radius: 13px; background: #101b2d; color: var(--texto); font: inherit; }
+.formulario-acceso .boton-principal { width: 100%; }
+.cambiar-acceso { padding: 12px; color: var(--verde); background: none; }
+.aviso { color: var(--suave); font-size: 13px; line-height: 1.5; text-align: center; }

@@ -1,17 +1,14 @@
 <ion-content>
   <main class="pagina">
+    @if (datos.error) { <p class="error-datos">No se pudieron cargar los datos: {{ datos.error }}</p> }
     <header class="cabecera inicio-cabecera">
-      <div class="saludo"><div class="avatar">VT</div><div><small>Buenos días,</small><strong>Valentina</strong></div></div>
+      <div class="saludo"><div class="avatar">↗</div><div><small>Bienvenido a</small><strong>FinSight</strong></div></div>
       <button class="icono-boton" aria-label="Notificaciones" (click)="aviso = 'No hay notificaciones nuevas.'">♧<i></i></button>
     </header>
     <section class="balance-card">
       <div class="fila"><span class="sobrelinea">BALANCE TOTAL</span><button class="pastilla" (click)="mostrarSaldo = !mostrarSaldo">{{ mostrarSaldo ? '◉ Ocultar' : '◉ Mostrar' }}</button></div>
       <div class="balance-valor">{{ mostrarSaldo ? datos.corto(datos.balance) : '•••••' }} @if (mostrarSaldo) { <small>CLP</small> }</div>
-      <div class="variacion"><span>↑ {{ mostrarSaldo ? '+$1.91M este mes' : '••••••' }}</span><small>vs. julio 2026</small></div>
-      <svg class="sparkline" viewBox="0 0 342 52" preserveAspectRatio="none" aria-label="Evolución del balance">
-        <path d="M0 26 C28 26 54 38 68 38 C90 38 114 14 137 14 C160 14 182 44 205 44 C228 44 250 4 274 4 C298 4 320 22 342 22" fill="none" stroke="#00d4aa" stroke-width="2" />
-      </svg>
-      <div class="meses"><span>Mar</span><span>Abr</span><span>May</span><span>Jun</span><span>Jul</span><span>Ago</span></div>
+      <div class="variacion"><span>{{ mostrarSaldo ? datos.corto(datos.ingresos - datos.gastos) : '••••••' }} neto este mes</span></div>
       <div class="balance-resumen">
         <div class="resumen ingreso"><small>↑ Ingresos</small><strong>{{ mostrarSaldo ? datos.corto(datos.ingresos) : '••••' }}</strong></div>
         <div class="resumen gasto"><small>↓ Gastos</small><strong>{{ mostrarSaldo ? datos.corto(datos.gastos) : '••••' }}</strong></div>
@@ -29,8 +26,8 @@
         <div class="fila"><h2>Ingresos vs Gastos</h2><small><span class="verde">●</span> Ingreso &nbsp;<span class="rosado">●</span> Gasto</small></div>
         <div class="filtros periodo"><button [class.activo]="periodo === '3m'" (click)="periodo = '3m'">3 meses</button><button [class.activo]="periodo === '6m'" (click)="periodo = '6m'">6 meses</button></div>
         <div class="grafico-barras">
-          @for (m of mesesVisibles; track m) {
-            <div><div class="par-barras"><span [style.height.%]="m.ingreso / 4 * 100"></span><span [style.height.%]="m.gasto / 4 * 100"></span></div><small>{{ m.nombre }}</small></div>
+          @for (m of mesesVisibles; track m.nombre) {
+          <div><div class="par-barras"><span [style.height.%]="m.ingreso / datos.escalaMeses * 100"></span><span [style.height.%]="m.gasto / datos.escalaMeses * 100"></span></div><small>{{ m.nombre }}</small></div>
           }
         </div>
         <div class="dos-columnas">
@@ -50,10 +47,10 @@
       </div>
     }
     <div class="lista">
-      @for (m of movimientosVisibles; track m) {
+      @for (m of movimientosVisibles; track m.id) {
         <div class="movimiento">
           <span class="emoji" [class.emoji-ingreso]="m.tipo === 'ingreso'">{{ m.emoji }}</span>
-          <div class="detalle"><strong>{{ m.nombre }}</strong><small>{{ m.categoria }} · {{ m.fecha }}</small></div>
+          <div class="detalle"><strong>{{ m.nombre }}</strong><small>{{ m.categoria }} · {{ m.fechaTexto }}</small></div>
           <strong class="monto" [class.positivo]="m.tipo === 'ingreso'">{{ m.tipo === 'ingreso' ? '+' : '-' }}{{ datos.corto(m.monto) }}</strong>
         </div>
       } @empty { <p class="vacio">Sin resultados</p> }

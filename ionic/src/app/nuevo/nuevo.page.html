@@ -1,5 +1,6 @@
 <ion-content>
   <main class="pagina">
+    @if (datos.error) { <p class="error-datos">No se pudieron cargar los datos: {{ datos.error }}</p> }
     <header class="cabecera"><a class="volver" routerLink="/inicio" aria-label="Volver a Inicio">×</a><h1>Nuevo movimiento</h1></header>
     <div class="selector-tipo">
       <button [class.activo]="tipo === 'gasto'" (click)="cambiarTipo('gasto')">↓ &nbsp;Gasto</button>
@@ -18,7 +19,14 @@
       }
     </div>
     <ion-input class="descripcion" aria-label="Descripción" placeholder="Descripción (opcional)" [(ngModel)]="descripcion"></ion-input>
-    <button class="boton-principal" [class.rosa]="tipo === 'gasto'" (click)="guardar()">Guardar movimiento</button>
+    @if (datos.cuentas.length) {
+      <label class="cuenta-destino">Cuenta
+        <select [(ngModel)]="cuentaId">
+          @for (cuenta of datos.cuentas; track cuenta.id) { <option [value]="cuenta.id">{{ cuenta.nombre }}</option> }
+        </select>
+      </label>
+    } @else { <p class="vacio">Primero agrega una cuenta en Cuentas.</p> }
+    <button class="boton-principal" [class.rosa]="tipo === 'gasto'" [disabled]="guardando || !datos.cuentas.length" (click)="guardar()">{{ guardando ? 'Guardando…' : 'Guardar movimiento' }}</button>
   </main>
 </ion-content>
 <app-navegacion />

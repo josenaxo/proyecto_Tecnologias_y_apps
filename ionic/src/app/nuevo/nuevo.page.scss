@@ -14,3 +14,5 @@
 .categorias button span { font-size: 19px; }
 .categorias button.elegida { border-color: var(--rosa); background: rgba(255,90,126,.12); color: var(--texto); }
 .descripcion { --color: var(--texto); --placeholder-color: var(--suave); min-height: 45px; padding: 0 13px !important; margin: 17px 0; border: 1px solid var(--borde); border-radius: 14px; background: rgba(255,255,255,.04); font-size: 13px; }
+.cuenta-destino { display: grid; gap: 7px; margin-bottom: 17px; color: var(--suave); font-size: 12px; }
+.cuenta-destino select { width: 100%; padding: 12px; border: 1px solid var(--borde); border-radius: 13px; background: #101b2d; color: var(--texto); font: inherit; }

@@ -62,6 +62,8 @@ small { color: var(--suave); font-size: 11px; }
 .boton-principal.rosa { background: linear-gradient(135deg, #ff5a7e, #d93d65); box-shadow: 0 4px 24px rgba(255,90,126,.25); }
 .boton-contorno { display: grid; place-items: center; width: 100%; min-height: 46px; margin-top: 15px; border: 1px solid rgba(0,212,170,.22); border-radius: 15px; background: rgba(0,212,170,.07); color: var(--verde); font-size: 13px; font-weight: 600; }
 .vacio { padding: 40px 0; color: var(--suave); text-align: center; }
+.error-datos { padding: 12px; margin-bottom: 15px; border-radius: 12px; background: rgba(255,90,126,.12); color: var(--rosa); font-size: 12px; }
+button:disabled { opacity: .55; cursor: default; }
 
 @media (max-width: 360px) {
   .pagina { padding-right: 14px; padding-left: 14px; }

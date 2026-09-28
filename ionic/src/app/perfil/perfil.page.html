@@ -1,11 +1,11 @@
 <ion-content>
   <main class="pagina">
+    @if (datos.error) { <p class="error-datos">No se pudieron cargar los datos: {{ datos.error }}</p> }
     <header class="cabecera"><h1>Mi Perfil</h1></header>
     <div class="perfil">
-      <div class="avatar">VT</div>
-      <h2>Valentina Torres</h2>
-      <small>vale.torres&#64;gmail.com</small>
-      <div><span>✦ Premium</span><span>Desde Ene 2024</span></div>
+      <div class="avatar">↗</div>
+      <h2>Mi cuenta</h2>
+      <small>{{ email }}</small>
     </div>
     <div class="estadisticas">
       <div><strong>{{ datos.cuentas.length }}</strong><small>Cuentas</small></div>
@@ -15,10 +15,11 @@
     <div class="lista opciones">
       <button (click)="aviso = 'No hay notificaciones nuevas.'"><span>🔔</span>Notificaciones<small>Activadas ›</small></button>
       <button (click)="aviso = 'Seguridad disponible más adelante.'"><span>🔒</span>Seguridad<small>›</small></button>
-      <a routerLink="/cuentas"><span>💳</span>Cuentas vinculadas<small>{{ datos.cuentas.length }} cuentas ›</small></a>
+      <a routerLink="/cuentas"><span>💳</span>Mis cuentas<small>{{ datos.cuentas.length }} cuentas ›</small></a>
       <button (click)="aviso = 'El tema oscuro es el diseño actual.'"><span>🌙</span>Tema<small>Oscuro ›</small></button>
       <button (click)="aviso = 'Exportación disponible más adelante.'"><span>📤</span>Exportar datos<small>›</small></button>
       <a routerLink="/bienvenida"><span>❓</span>Ayuda y soporte<small>›</small></a>
+      <button (click)="salir()"><span>↪</span>Cerrar sesión<small>›</small></button>
     </div>
   </main>
 </ion-content>

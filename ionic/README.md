@@ -1,26 +1,28 @@
-# FinSight — Ionic + Angular
+# FinSight — Ionic, Angular y Supabase
 
-Interfaz móvil basada en el diseño original de `../project`. No usa Supabase, Vercel ni servicios externos.
+Seis pantallas: Bienvenida (registro e inicio de sesión), Inicio, Cuentas, Nuevo, Metas y Perfil. La estructura sigue la [clase 3](https://udd-web-mobile.vercel.app/aprende/clase-3): un cliente de Supabase, `select` para leer, `insert` para crear, `update` para modificar y Auth para identificar al usuario.
 
-## Ejecutar
+## Proyecto Supabase
+
+La URL y la clave pública del proyecto ya están configuradas en `src/environments/environment.ts` y `src/environments/environment.prod.ts`. Nunca uses la `service_role` key en Ionic. La API confirma que existen las cuatro tablas y que el rol sin sesión no puede leerlas. Para reproducir la estructura en otro proyecto, ejecuta [supabase/schema.sql](supabase/schema.sql) una vez en **SQL Editor**.
+
+Para ejecutar la app desde la raíz del repositorio, usa la versión de Node indicada en [`.node-version`](.node-version):
 
 ```bash
 cd ionic
-npm install
+npm ci
 npm start
 ```
 
-Abre la dirección local indicada por Angular. Para comprobar la compilación: `npm run build`.
+Consulta el [README raíz](../README.md) para las verificaciones y las referencias a los prototipos anteriores.
 
-## Estructura para presentar
+Este proyecto tiene confirmación de correo activada. Tras registrarte, abre el enlace recibido antes de iniciar sesión. Revisa también **Authentication → URL Configuration** para que la confirmación vuelva a la URL de tu app (por ejemplo, `http://localhost:8100` si ejecutas Ionic en ese puerto).
 
-Hay seis páginas: `bienvenida`, `inicio`, `cuentas`, `nuevo`, `metas` y `perfil`. Cada carpeta tiene un `.page.ts` para el estado y las acciones, un `.page.html` para la vista y un `.page.scss` para sus estilos.
+## Flujo para presentar
 
-- `src/app/app.routes.ts` asigna una URL a cada página. `/` lleva a Bienvenida y el antiguo `/home` redirige a Inicio.
-- `src/app/navegacion` contiene la barra inferior. Sus enlaces usan `routerLink`; `routerLinkActive` marca la página actual.
-- `src/app/finanzas.service.ts` conserva los datos de ejemplo para que se compartan entre páginas. No hay base de datos.
-- `src/global.scss` contiene los colores y estilos que se repiten.
+1. En Bienvenida, crea una cuenta o inicia sesión. `supabase.service.ts` crea el cliente y maneja Auth; `auth.guard.ts` protege las otras cinco rutas.
+2. En Cuentas, agrega una cuenta con saldo inicial. En Nuevo, elige esa cuenta y guarda ingresos o gastos. `finanzas.service.ts` lee y escribe en Supabase y calcula balance, totales, análisis y gasto mensual desde los movimientos.
+3. En Cuentas → Presupuesto, cambia un límite y pulsa Guardar. En Metas, crea una meta y suma ahorro. Al recargar, los datos siguen allí.
+4. En Perfil, cierra sesión. Las políticas RLS hacen que cada usuario vea solo sus datos.
 
-Para mantener seis páginas, la lista completa y el análisis se despliegan dentro de Inicio. El presupuesto usa la misma ruta de Cuentas con `?presupuesto=1`; su botón «volver» regresa a la vista de cuentas. El formulario Nuevo guarda un movimiento en memoria y vuelve a Inicio. `[(ngModel)]` conecta los campos con las variables; `@for` dibuja listas y `@if` muestra las secciones opcionales.
-
-Los datos se reinician al recargar. Las funciones que requieren servicios futuros muestran un aviso.
+Consulta el [diagrama de la base de datos](supabase/DIAGRAMA.md). No se usa Storage porque la app financiera no maneja fotos. La interfaz deja de mostrar cifras de ejemplo para que los importes siempre correspondan a lo guardado.

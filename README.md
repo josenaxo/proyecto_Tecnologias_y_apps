@@ -1,37 +1,52 @@
-# FinSight — Plantillas HTML
+# FinSight
 
-Versión **HTML estática** del MVP que vive en `../src/App.tsx` (React + Vite + Tailwind).
-Generada para poder abrir, compartir o entregar cada pantalla sin necesidad de compilar el proyecto React.
+Aplicación de finanzas personales con Ionic, Angular y Supabase. La única aplicación activa está en [`ionic/`](ionic/): Bienvenida, Inicio, Cuentas, Nuevo, Metas y Perfil.
 
-## Contenido
+## Ejecutar localmente
 
-| Archivo | Pantalla | Origen en App.tsx |
-|---|---|---|
-| `index.html` | Galería / índice de pantallas | — |
-| `onboarding.html` | Bienvenida (3 slides) | `Onboarding` |
-| `home.html` | Inicio / Dashboard | `Home` |
-| `transactions.html` | Movimientos (búsqueda + filtros) | `Transactions` |
-| `accounts.html` | Cuentas (donut de patrimonio) | `Accounts` |
-| `add.html` | Nuevo movimiento (teclado numérico) | `AddTransaction` |
-| `goals.html` | Metas de ahorro | `Goals` |
-| `analytics.html` | Análisis (barras + categorías) | `Analytics` |
-| `budget.html` | Presupuesto mensual | `Budget` |
-| `profile.html` | Perfil y ajustes | `Profile` |
-| `assets/styles.css` | Marco de teléfono + reset (de `src/index.css` + `App.tsx`) | — |
+Usa la versión de Node indicada en [`ionic/.node-version`](ionic/.node-version). Desde la raíz del repositorio:
 
-## Cómo verlo
-
-Abre `index.html` directamente en el navegador (doble clic), o levanta un servidor estático:
-
-```bash
-cd "Finsight app templates/html"
-python3 -m http.server 4000
-# http://localhost:4000
+```powershell
+cd ionic
+npm ci
+npm start
 ```
 
-## Notas
+Abre la dirección que indique el servidor en la terminal. La configuración de Supabase y el recorrido de presentación están en el [README de la aplicación](ionic/README.md).
 
-- **Tailwind** se carga desde el CDN (`cdn.tailwindcss.com`) y las **fuentes** desde Google Fonts, así que la primera carga necesita internet.
-- Los datos (transacciones, cuentas, metas, categorías) están "horneados" en el HTML: se copiaron de `App.tsx` en el momento de generar.
-- La interactividad con estado de React (`useState`) se reescribió en JS vanilla dentro de cada archivo: toggle de saldo, slider de onboarding, filtros/buscador, teclado numérico, selector de periodo.
-- Para regenerar tras cambiar `App.tsx`: `node _build.mjs` (revisa antes que los datos y textos coincidan).
+## Verificaciones
+
+Desde `ionic/`:
+
+```powershell
+npm run build
+npm test -- --watch=false
+npm run lint
+```
+
+## Estructura
+
+- `ionic/src/`: código y recursos de la aplicación.
+- `ionic/supabase/`: SQL y diagrama de la base de datos. Consulta las instrucciones de la aplicación antes de ejecutar el SQL.
+- `.gitignore`: exclusiones para dependencias, compilación, cachés y archivos locales.
+
+## Prototipos anteriores
+
+Las carpetas `html/` (pantallas HTML estáticas) y `project/` (prototipo React y Vite) se retiraron del árbol de trabajo para mantener una sola aplicación activa. Se conservan como referencia en el historial de Git, en el commit `7dfd9e4`:
+
+- [Prototipo HTML](https://github.com/josenaxo/proyecto_Tecnologias_y_apps/tree/7dfd9e4/html).
+- [Prototipo React](https://github.com/josenaxo/proyecto_Tecnologias_y_apps/tree/7dfd9e4/project).
+
+Para consultarlos localmente sin modificar la aplicación actual, desde la raíz:
+
+```powershell
+git ls-tree -r --name-only 7dfd9e4 -- html project
+git show 7dfd9e4:html/README.md
+git show 7dfd9e4:project/src/App.tsx
+```
+
+También puedes exportarlos a un ZIP para examinarlos por separado:
+
+```powershell
+git archive --format=zip --output=../finsight-prototipos.zip 7dfd9e4 html project
+```

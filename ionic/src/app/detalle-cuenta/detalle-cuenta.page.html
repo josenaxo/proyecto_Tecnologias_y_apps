@@ -1,7 +1,38 @@
 <ion-content>
   <main class="pagina">
-    <p>id: {{ id }}</p>
-     <p>nombre de cuenta: {{ cuenta?.nombre }}</p>
-      <p>movimientos : {{ movimientos.length }}</p>
+    <header class="cabecera">
+      <a class="volver" routerLink="/cuentas" aria-label="Volver a Cuentas">
+        .
+      </a>
+      <h1>{{cuenta?.nombre ?? 'Cuenta'}}</h1>
+    </header>
+    @if(cuenta; as c){
+      <section class="tarjeta saldo" [style.--acento]="c.color">
+        <small class="sobrelinea">SALDO ACTUAL</small>
+        <strong>{{ datos.dinero(c.saldo) }}</strong>
+        <small>{{ c.tipo }} · partió con {{ datos.corto(c.saldo_inicial)}}</small>
+      </section>
+      <div class="dos-columnas">
+        <div class="resumen ingreso"><small>↑ Entró</small><strong>{{datos.corto(entradas)}}</strong></div>
+        <div class="resumen gasto"><small>↓ Salió</small><strong>{{ datos.corto(salidas) }}</strong></div>
+      </div>
+      <p class="sobrelinea titulo-seccion">MOVIMIENTOS EN ESTA CUENTA</p>
+      <div class="lista">
+        @for (m of movimientos; track m.id) {
+          <div class="movimiento">
+            <span class="emoji" [class.emoji-ingreso]="m.tipo == 'ingreso'">{{m.emoji}}</span>
+            <div class="detalle"><strong>{{m.nombre}}</strong><small>{{m.categoria}} · {{ m.fechaTexto }}</small></div>
+            <strong class="monto" [class.positivo]="m.tipo === 'ingreso'">{{ m.tipo ===  'ingreso' ? '+' : '-' }}{{ datos.corto(m.monto) }}</strong>
+          </div>
+        }@empty{
+          <p class="vacio">Esta cuenta aún no tiene movimientos.</p>
+        }
+      </div>
+        }@else{
+          <p class="vacio">No encontramos esta cuenta.</p>
+        }
+    
+   
   </main>
 </ion-content>
+<app-navegacion />

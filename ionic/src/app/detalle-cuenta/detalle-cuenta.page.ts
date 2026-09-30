@@ -22,7 +22,7 @@ export class DetalleCuentaPage  {
   get movimientos() {
     return this.datos.movimientos.filter(m => m.cuenta_id === this.id)
   }
-  get entradas(): number{
+  get entradas(): number {
     return this.movimientos.filter(m => m.tipo === "ingreso").reduce((total,m) => total + m.monto, 0)
   }
   get salidas(): number {

@@ -31,7 +31,7 @@
         <h2>Nueva cuenta</h2>
         <ion-input label="Nombre" label-placement="stacked" [(ngModel)]="nombre"></ion-input>
         <ion-input label="Tipo" label-placement="stacked" [(ngModel)]="tipo"></ion-input>
-        <ion-input type="number" label="Saldo inicial en CLP" label-placement="stacked" [(ngModel)]="saldo"></ion-input>
+        <ion-input type="number" min="0" label="Saldo inicial en CLP" label-placement="stacked" [(ngModel)]="saldo"></ion-input>
         <button class="boton-principal" [disabled]="guardando" (click)="agregarCuenta()">Guardar cuenta</button>
       </section>
     }

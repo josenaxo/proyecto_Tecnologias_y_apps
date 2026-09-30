@@ -18,7 +18,7 @@
       <div class="lista">
         @for (m of movimientos; track m.id) {
           <div class="movimiento">
-            <span class="emoji" [class.emoji-ingreso]="m.tipo == 'ingreso'">{{m.emoji}}</span>
+            <span class="emoji" [class.emoji-ingreso]="m.tipo === 'ingreso'">{{m.emoji}}</span>
             <div class="detalle"><strong>{{m.nombre}}</strong><small>{{m.categoria}} · {{ m.fechaTexto }}</small></div>
             <strong class="monto" [class.positivo]="m.tipo === 'ingreso'">{{ m.tipo ===  'ingreso' ? '+' : '-' }}{{ datos.corto(m.monto) }}</strong>
           </div>

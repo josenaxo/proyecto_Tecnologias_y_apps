@@ -67,8 +67,8 @@ export class CuentasPage {
   }
 
   async agregarCuenta(): Promise<void> {
-    if (!this.nombre.trim() || this.saldo === null || !Number.isFinite(Number(this.saldo))) {
-      this.aviso = 'Escribe el nombre y el saldo inicial de la cuenta.';
+    if (!this.nombre.trim() || this.saldo === null || !Number.isFinite(Number(this.saldo)) || Number(this.saldo) < 0) {
+      this.aviso = 'Escribe un nombre y un saldo inicial de cero o más.';
       return;
     }
     this.guardando = true;

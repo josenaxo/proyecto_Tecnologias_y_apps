@@ -125,6 +125,9 @@ export class FinanzasService {
   }
 
   async agregarCuenta(nombre: string, tipo: string, saldo: number): Promise<void> {
+    if (!Number.isFinite(saldo) || saldo < 0) {
+      throw new Error('El saldo inicial no puede ser negativo.');
+    }
     const colores = ['#00d4aa', '#ffb347', '#a78bfa', '#ff5a7e', '#60a5fa'];
     const { data, error } = await this.supabase.cliente!.from('cuentas').insert({
       usuario_id: this.usuarioId, nombre, tipo, saldo_inicial: saldo,
@@ -135,6 +138,16 @@ export class FinanzasService {
   }
 
   async agregarMovimiento(nombre: string, categoria: string, monto: number, tipo: Tipo, cuentaId: string): Promise<void> {
+    if (!Number.isFinite(monto) || monto <= 0) {
+      throw new Error('El monto debe ser mayor que cero.');
+    }
+    const cuenta = this.cuentas.find(c => c.id === cuentaId);
+    if (!cuenta) {
+      throw new Error('Selecciona una cuenta válida.');
+    }
+    if (tipo === 'gasto' && monto > cuenta.saldo) {
+      throw new Error(`Saldo insuficiente en ${cuenta.nombre}. Disponible: ${this.dinero(cuenta.saldo)}.`);
+    }
     const { data, error } = await this.supabase.cliente!.from('movimientos').insert({
       usuario_id: this.usuarioId, cuenta_id: cuentaId, nombre: nombre.trim() || categoria, categoria, monto, tipo,
     }).select('id,cuenta_id,nombre,categoria,monto,tipo,fecha').single();

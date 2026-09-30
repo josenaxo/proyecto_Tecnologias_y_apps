@@ -24,6 +24,7 @@
         <select [(ngModel)]="cuentaId">
           @for (cuenta of datos.cuentas; track cuenta.id) { <option [value]="cuenta.id">{{ cuenta.nombre }}</option> }
         </select>
+        @if (cuentaSeleccionada; as cuenta) { <small>Saldo disponible: {{ datos.dinero(cuenta.saldo) }}</small> }
       </label>
     } @else { <p class="vacio">Primero agrega una cuenta en Cuentas.</p> }
     <button class="boton-principal" [class.rosa]="tipo === 'gasto'" [disabled]="guardando || !datos.cuentas.length" (click)="guardar()">{{ guardando ? 'Guardando…' : 'Guardar movimiento' }}</button>

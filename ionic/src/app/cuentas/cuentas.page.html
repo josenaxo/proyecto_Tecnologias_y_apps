@@ -18,11 +18,11 @@
     <p class="sobrelinea titulo-seccion">MIS CUENTAS</p>
     <div class="lista">
       @for (c of datos.cuentas; track c.id) {
-        <div class="cuenta">
+        <a class="cuenta" [routerLink]="['/cuentas', c.id]">
           <span class="cuenta-icono" [style.color]="c.color" [style.background]="c.color + '18'">●</span>
           <div class="detalle"><strong>{{ c.nombre }}</strong><small>{{ c.tipo }}</small></div>
           <strong class="monto neutro">{{ datos.corto(c.saldo) }}</strong>
-        </div>
+        </a>
       }
       @if (!datos.cuentas.length) { <p class="vacio">Agrega tu primera cuenta para comenzar.</p> }
     </div>
